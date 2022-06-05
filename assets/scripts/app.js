@@ -1,25 +1,58 @@
+const addMovieModal = document.getElementById("add-modal");
+//alternative aways to add event listener
+// const addMovieModal = document.querySelector('#add-modal');
+// const addMovieModal = document.body.children[1];
 
-const addMovie = document.getElementById('add-modal'); // Get the add modal
-const addMovieBtn = document.getElementById('addBtn'); // Get the add button
-const backdrop = document.getElementById('backdrop'); // Get the backdrop
-const cancelAddMovieBtn = document.getElementById('cancelAddBtn'); // Get the cancel button
+const startAddMovieButton = document.querySelector("header button"); //get add movie button
+// const startAddMovieButton = document.querySelector('header').lastElementChild;
+const backdrop = document.getElementById("backdrop"); // get backdrop
+// const backdrop = document.body.firstElementChild;
+const cancelAddMovieButton = addMovieModal.querySelector(".btn--passive");
+const confirmAddMovieButton = cancelAddMovieButton.nextElementSibling;
+const userInputs = addMovieModal.querySelectorAll("input");
+// const userInputs = addMovieModal.getElementsByTagName('input');
 
+const toggleBackdrop = () => {
+  backdrop.classList.toggle("visible");
+}; //toggle backdrop
 
-addMovieBtn.addEventListener('click', () => { // When the add button is clicked
-    addMovie.classList.toggle('visible'); // Toggle the visibility of the modal
-    backdrop.classList.toggle('visible'); // Toggle the visibility of the backdrop
-})
+const toggleMovieModal = () => {
+  //toggle movie modal
+  // function() {}
+  addMovieModal.classList.toggle("visible");
+  toggleBackdrop();
+};
 
-cancelAddMovieBtn.addEventListener('click', () => { // When the cancel button is clicked
-    addMovie.classList.remove('visible'); // Remove the visibility of the modal
-    backdrop.classList.remove('visible'); // Remove the visibility of the backdrop
-})
+const cancelAddMovieHandler = () => {
+  //cancel add movie
+  toggleMovieModal();
+};
 
+const addMovieHandler = () => {
+  //add movie
+  const titleValue = userInputs[0].value; //get title value
+  const imageUrlValue = userInputs[1].value; //get image url value
+  const ratingValue = userInputs[2].value; //get rating value
 
+  if (
+    //check if all inputs are filled
+    titleValue.trim() === "" || //trim white space
+    imageUrlValue.trim() === "" || //trim white space
+    ratingValue.trim() === "" || //trim white space
+    +ratingValue < 1 || //check if rating is a number
+    +ratingValue > 5 //check if rating is a number
+  ) {
+    alert("Please enter valid values (rating between 1 and 5)."); //alert user
+    return; //return if not valid
+  }
+}; //add event listeners
 
-// alternative way to add event listener
+const backdropClickHandler = () => {
+  //backdrop click
+  toggleMovieModal(); //toggle movie modal
+};
 
-// backdrop.addEventListener('click', () => { // When the backdrop is clicked
-//     addMovie.classList.remove('visible'); // Remove the visibility of the modal
-//     backdrop.classList.remove('visible'); // Remove the visibility of the backdrop
-// })
+startAddMovieButton.addEventListener("click", toggleMovieModal);
+backdrop.addEventListener("click", backdropClickHandler);
+cancelAddMovieButton.addEventListener("click", cancelAddMovieHandler);
+confirmAddMovieButton.addEventListener("click", addMovieHandler);
